@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Details and Budget</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        .container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            background-color: #ddd;
+            border-radius: 5px;
+        }
+        .tab.active {
+            background-color: #007bff;
+            color: #fff;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>David Cooper</h1>
+    <p>DOB: 03 Jan 2000, 24 Years</p>
+    <p>Created: 8 months ago</p>
+
+    <div class="tabs">
+        <div class="tab active" data-tab="budget">Budget</div>
+        <div class="tab" data-tab="other">Other Tab</div>
+    </div>
+
+    <div class="tab-content active" id="budget">
+        <table>
+            <thead>
+                <tr>
+                    <th>Budget Name</th>
+                    <th>Amount</th>
+                    <th>Reason</th>
+                </tr>
+            </thead>
+            <tbody id="expenses-table">
+                <!-- Data will be injected here -->
+            </tbody>
+        </table>
+        <p></p>
+        <button onclick="addNewExpense()">Add New</button>
+    </div>
+
+    <div class="tab-content" id="other">
+        <p>Other Tab Content</p>
+    </div>
+</div>
+
+<script>
+    document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function () {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            this.classList.add('active');
+            document.getElementById(this.getAttribute('data-tab')).classList.add('active');
+        });
+    });
+
+    async function fetchExpenses() {
+        const res = await fetch('/home');  // Fetch expenses from the server
+        const data = await res.json();
+        const tableBody = document.getElementById('expenses-table');
+        tableBody.innerHTML = '';  // Clear existing rows
+        data.forEach(expense => {
+            tableBody.innerHTML += `
+                <tr>
+                    <td>${expense.budget_name}</td>
+                    <td>${expense.amount}</td>
+                    <td>${expense.reason}</td>
+                </tr>
+            `;
+        });
+    }
+
+    function addNewExpense() {
+        const budget_name = prompt('Enter budget name:');
+        const amount = prompt('Enter amount:');
+        const reason = prompt('Enter reason:');
+        
+        fetch('/addNewExpenditure', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ budget_name, amount, reason })
+        })
+        .then(fetchExpenses);  // Refresh the expenses after adding
+    }
+
+    // Fetch expenses when the page loads
+    window.onload = fetchExpenses;
+</script>
+
+</body>
+</html>
