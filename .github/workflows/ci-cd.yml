@@ -34,7 +34,7 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.82.9.161:3000 " #(Replace Public IP)
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.82.9.161 " #(Replace Public IP)
             cd /home/ubuntu/CI_CD-Pipeline-Setup &&  #(Replace APplication Path in AWS)
             rm -rf .github/workflows/ci-cd.yml &&  # Remove and pull the files
             git pull && 
