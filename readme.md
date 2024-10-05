@@ -104,12 +104,19 @@ Click New Repository Secret.
 Name the secret EC2_SSH_KEY.
 Paste the private key content you copied and save it.
 
+Setup YAML File 
+
+Push the code
+
+Run git pull in aws
 
 
+Now to test go to Github 
+Repo
+Actions
+Push ANything
 
-
-
-
+Check Logs
 
 
 
