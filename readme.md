@@ -1,122 +1,132 @@
-Step 1: 
- Initialise NPM npm init
- Install all the dependencies npm i
- Set all your application related files.
- Run it Locally
+Here's your result.
 
-Step 2:
- npm init playwright@latest
- Write the test files
- Run it locally
+# CI/CD Pipeline Setup
 
-Step 3:
- Create a repo in GitHub
- git init
- git add .
- git commit -m "First Commit"
- git remote add origin https://github.com/Abishek-GH/CI_CD-Pipeline-Setup.git
- git branch -M Main
- git push -u origin Main
-
-Step 4:
- Deploy Application (AWS)
- Create EC2 Instance (Ubuntu, Allow Port 3000 in Inbound Rules, All all type of traffic)
- Create a new KeyPair (.pem file)
- Launch Instance
- Edit Security group and Allow (Custom TCP, 3000, Ipv4 Anywhere)
+## Step 1: Initialize NPM
+    1. Run the following command to initialize your project:
+        npm init
+    2. Install all the necessary dependencies:
+        npm install
+    3. Set up all your application-related files.
+    4. Run your application locally to ensure it works correctly.
 
 
-Step 5: 
- Connect EC2 using Instace Connect (CloudShell)
- ssh -i "C:/Users/abish/Downloads/your-key-file.pem" ubuntu@your-ec2-public-ip (Public Ip is displayed on EC2 Instance)
- sudo apt update
- sudo apt install nodejs npm git
- git clone https://github.com/your-username/your-repo.git
- ls
- cd your-directory(Repo-Name)
- npm i
- npx playwright install
- sudo npx playwright install-deps (TO install few other dependcies)
-
-Step 6:
- Run Your APplication from AWS on the Public IP
-   - Start your app using Node.js or PM2:
-     node app.js
-     or 
-     sudo npm install -g pm2 (To run even if you are signed out)
-     pm2 start app.js
-     Check if its running (http://3.82.9.161:3000/)
-
-    Resolve Sharp Module Error (if encountered):
-   - If you get an error related to **sharp**, follow these steps:
-     - Install sharp with optional dependencies:
-       ```bash
-       npm install --include=optional sharp
-       ```
-     - Rebuild sharp:
-       ```bash
-       npm rebuild sharp --force
-       ```
-     - Clear npm cache and reinstall:
-       ```bash
-       npm cache clean --force
-       rm -rf node_modules
-       npm install
-       ```
-     - Install necessary build tools:
-       ```bash
-       sudo apt-get install build-essential libvips-dev
-
-Step 7:
-  Create a .yml file with required configuration
-  inside .github/workflows/
-Step 8:
- Run the bvelwo command in command prompt 
-  ssh-keygen -t rsa -b 4096 -C "abishek0149@gmail.com" 
-  Or This 
-    ssh-keygen -t rsa -b 4096 -f C:\Users\abish\.ssh\id_rsa_github -C "abishek0149@gmail.com"
-    (Three times Snter, For File Path chekc and Passphrase)
-  (If encountered Error saying No Directory Exist, Delete the .ssh folder an run the below command)
-  mkdir C:\Users\abish\.ssh
-
-type C:\Users\abish\.ssh\id_rsa_github.pub (TO view the key and copy it)
-
-ssh -i "C:/Users/abish/Downloads/CI_CD.pem" ubuntu@3.82.9.161
-
-nano ~/.ssh/authorized_keys
-Now remove everything and paste the public key copied above
-Use right click and paste
-
-ctrl x
-y
-Enter
-
-Now copy the private kye
-type C:\Users\abish\.ssh\id_rsa_github
+## Step 2: Set Up Playwright
+    1. Initialize Playwright by running:
+        npm init playwright@latest 
+    2. Write your test files as needed.
+    3. Run your tests locally to verify their functionality.
 
 
-
-Add the private key to GitHub Secrets:
-
-Go to your GitHub repository.
-Navigate to Settings > Secrets and Variables > Actions.
-Click New Repository Secret.
-Name the secret EC2_SSH_KEY.
-Paste the private key content you copied and save it.
-
-Setup YAML File 
-
-Push the code
-
-Run git pull in aws
-
-
-Now to test go to Github 
-Repo
-Actions
-Push ANything
-
-Check Logs
+## Step 3: Create a GitHub Repository
+    1. Initialize Git in your project directory:
+        git init
+    2. Add all files to the staging area: 
+        git add . 
+    3. Commit the changes with a message: 
+        git commit -m "First Commit" 
+    4. Add the remote repository: 
+        git remote add origin <https://github.com/YourUsername/YourRepo.git>
+    5. Rename the default branch to "main":
+        git branch -M main
+    6. Push the changes to GitHub: 
+        git push -u origin main
 
 
+## Step 4: Deploy Application on AWS
+    1. Create an EC2 Instance:
+        - Select an Ubuntu AMI.
+        - Allow Port 3000 in Inbound Rules.
+        - Enable all types of traffic as required.
+    2. Create a Key Pair:
+        - Generate a new KeyPair and save the `.pem` file securely.
+    3. Launch the Instance.
+    4. Edit Security Group:
+        - Allow Custom TCP traffic on port 3000 and set the source to "Anywhere" (IPv4).
 
+
+## Step 5: Connect to EC2 Instance
+    1. Connect to your EC2 instance using Instance Connect or SSH:
+        ssh -i "Path/To/Your-Key-File.pem" ubuntu@Your-EC2-Public-IP
+    2. Update package lists and install necessary packages:
+        sudo apt update
+        sudo apt install nodejs npm git
+    3. Clone your GitHub repository:
+        git clone <https://github.com/YourUsername/YourRepo.git>
+    4. Navigate to your project directory:
+        ls
+        cd YourDirectoryName
+    5. Install dependencies:
+        npm install
+    6. Install Playwright:
+        npx playwright install
+    7. Install additional dependencies (if needed to install any dependencies):
+        sudo npx playwright install-deps
+
+
+## Step 6: Run Your Application on AWS
+    1. Start your application using Node.js:
+    or install PM2 to keep your application running (Even when signed out):
+        node app.js
+        sudo npm install -g pm2
+        pm2 start app.js
+    - Persistence: PM2 keeps the application running in the background even if the terminal is closed, while `node app.js` does not.
+    - Management: PM2 provides additional features like monitoring and automatic restarts, whereas using Node.js directly is more straightforward but lacks those capabilities.
+    1. Check if your application is running by accessing it at http://Your-Public-IP:3000.
+    ### Resolve Sharp Module Error (if encountered)
+    If you encounter an error related to **sharp**, follow these steps:
+    1. Install sharp with optional dependencies:
+        npm install --include=optional sharp
+    2. Rebuild sharp:
+        npm rebuild sharp --force
+    3. Clear npm cache and reinstall dependencies:
+        npm cache clean --force
+        rm -rf node_modules
+        npm install
+    4. Install necessary build tools:
+        sudo apt-get install build-essential libvips-dev
+
+
+## Step 7: Create GitHub Actions Workflow
+    1. Create a `.yml` file with the required configuration inside the `.github/workflows/` directory of your repository.
+
+
+## Step 8: Generate SSH Key
+    1. Run the following command in the command prompt:
+    Without `-f` option: If you do not specify a file path with `-f`, the SSH key pair will be saved in the default location (`~/.ssh/id_rsa` for the private key and `~/.ssh/id_rsa.pub` for the public key).
+        ssh-keygen -t rsa -b 4096 -C "YourEmail@example.com"
+        or:
+        `-f Path/To/YourKeyFile`: This option specifies the file path and name where the generated SSH key pair will be saved. 
+        ssh-keygen -t rsa -b 4096 -f Path/To/YourKeyFile -C "YourEmail@example.com"
+        *(Press Enter three times for the default file path and no passphrase).*
+    2. If you encounter an error saying "No directory exists," navigate to the .ssh folder and delete it manually, then create the `.ssh` folder using the below command:
+        mkdir Path/To/.ssh
+    3. View and copy your public key:
+        type Path/To/id_rsa_github.pub
+    4. Connect to your EC2 instance:
+        ssh -i "Path/To/YourKeyFile.pem" ubuntu@Your-Public-IP
+    5. Edit the authorized keys file:
+        nano ~/.ssh/authorized_keys
+        - Remove existing content and paste the copied public key using right-click and clicking paste.
+        - Save and exit by pressing `CTRL + X`, then `Y`, and `Enter`.
+    6. Copy your private key:
+        type Path/To/id_rsa_github
+
+
+## Step 9: Add Private Key to GitHub Secrets
+    1. Go to your GitHub repository.
+    2. Navigate to **Settings > Secrets and Variables > Actions**.
+    3. Click **New Repository Secret**.
+    4. Name the secret `EC2_SSH_KEY`. (Must use the same name in the yaml file)
+    5. Paste the content of the private key and save it.
+
+## Step 10: Set Up YAML File
+    Configure your GitHub Actions YAML file with necessary environment variables and scripts.
+
+## Step 11: Push the Code
+    Push your code changes to GitHub.
+
+## Step 12: Test the Setup
+    On GitHub, navigate to your repository.
+    Click on Actions and push any changes.
+    Check the logs to verify that the CI/CD pipeline runs successfully.
