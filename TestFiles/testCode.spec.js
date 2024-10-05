@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 
 test('test', async ({ page }) => {
-  await page.goto('http://54.158.238.237:3000/');
+  await page.goto('http://3.82.9.161:3000/');
   await page.getByText('Other Tab', { exact: true }).click();
   await expect(page.getByText('Other Tab Content')).toBeVisible();
   await page.getByText('Budget', { exact: true }).click();
