@@ -1,0 +1,45 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - Main  #Your Branch name (Case Sensitive)
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'  # Use the version you need
+
+      - name: Install Dependencies
+        run: npm install  # Install your project dependencies
+
+      - name: Run Playwright Tests
+        run: |
+          npx playwright install
+          npx playwright test testCode.spec.js --project=chromium  # Run your Playwright tests
+
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh 
+          echo "${{ secrets.EC2_SSH_KEY }}" > ~/.ssh/id_rsa #The EC2_SSH_KEY name is which we giv ein our Github Sectrest Key Name)
+          chmod 600 ~/.ssh/id_rsa
+
+      - name: Deploy to EC2
+        run: |
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ubuntu@3.82.9.161:3000 " #(Replace Public IP)
+            cd /home/ubuntu/CI_CD-Pipeline-Setup &&  #(Replace APplication Path in AWS)
+            rm -rf .github/workflows/ci-cd.yml &&  # Remove and pull the files
+            git pull && 
+            pm2 restart server.js
+          "
+        env:
+          SSH_AUTH_SOCK: /tmp/ssh_auth_sock
+
